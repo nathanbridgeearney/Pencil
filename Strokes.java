@@ -5,19 +5,19 @@ public class Strokes {
     double lasty;
     double nx;
     double ny;
-
-
-    public Strokes(double lastX, double lastY, double x, double y) {
-        lastx = lastX;
-        lasty = lastY;
-        nx = x;
-        ny=y;
-
-    }
-
+    int lineNum;
 
     /**
      * Constructor
      */
+
+    public Strokes (double lastX, double lastY, double x, double y, int line) {
+        lastx = lastX;
+        lasty = lastY;
+        nx = x;
+        ny=y;
+        lineNum = line;
+    }
+
 
 }

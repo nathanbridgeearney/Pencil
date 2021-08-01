@@ -17,25 +17,59 @@ import java.util.*;
  * Pencil
  */
 public class Pencil {
+    int line = 0;
+    int line2 = 0;
+    ArrayList<Strokes> history = new ArrayList<>();
+    ArrayList<Strokes> redoS = new ArrayList<>();
 
+    boolean temp = false;
     private double lastX;
     private double lastY;
 
-    private Stack<Strokes> history = new Stack<Strokes>();
-
 
     public void undo() {
-        if (!history.empty()) {
-            history.pop();
-            UI.clearGraphics();
-            for (int i = 0; i < history.size(); i++) {
-                Strokes temp = history.pop();
-                UI.drawLine(temp.lastx, temp.lasty,temp.nx, temp.ny);
+        temp = false;
+        UI.clearGraphics();
+        for (Strokes strokes : history) {
+            if (strokes.lineNum == line) {
+                redoS.add(new Strokes(strokes.lastx, strokes.lasty, strokes.nx, strokes.ny, line2));
+                temp = true;
             }
-
-        } else {
-            UI.println("test");
         }
+
+        history.removeIf(k -> k.lineNum == line);
+        for (Strokes i : history) {
+            UI.drawLine(i.lastx, i.lasty, i.nx, i.ny);
+        }
+        line--;
+        if (line <= 0) line = 0;
+        UI.println("Undo Count " + line);
+    }
+
+    public void redo() {
+        UI.clearGraphics();
+
+        for (Strokes strokes : redoS) {
+            if (strokes.lineNum == line2) {
+                history.add(new Strokes(strokes.lastx, strokes.lasty, strokes.nx, strokes.ny, line));
+
+            }
+        }
+
+
+
+
+        redoS.removeIf(k -> k.lineNum == line2);
+
+        for (Strokes i : history) {
+            UI.drawLine(i.lastx, i.lasty, i.nx, i.ny);
+        }
+
+        for (Strokes i : redoS) {
+            UI.drawLine(i.lastx, i.lasty, i.nx, i.ny);
+        }
+
+        line++;
 
     }
 
@@ -47,6 +81,7 @@ public class Pencil {
         UI.setMouseMotionListener(this::doMouse);
         UI.addButton("Quit", UI::quit);
         UI.addButton("Undo", this::undo);
+        UI.addButton("Redo", this::redo);
         UI.setLineWidth(3);
         UI.setDivider(0.0);
     }
@@ -58,16 +93,21 @@ public class Pencil {
         if (action.equals("pressed")) {
             lastX = x;
             lastY = y;
+            line++;
+            redoS.clear();
+            line2 = 0;
 
         } else if (action.equals("dragged")) {
             UI.drawLine(lastX, lastY, x, y);
+            history.add(new Strokes(lastX, lastY, x, y, line));
             lastX = x;
             lastY = y;
-            history.push(new Strokes(lastX, lastY, x, y));
+
 
         } else if (action.equals("released")) {
             UI.drawLine(lastX, lastY, x, y);
-            history.push(new Strokes(lastX, lastY, x, y));
+            UI.println(line);
+
         }
 
     }
