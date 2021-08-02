@@ -1,7 +1,7 @@
 import ecs100.UI;
 
 import java.awt.*;
-
+//Data for the strokes
 public class Strokes {
     double lastx;
     double lasty;
@@ -14,7 +14,7 @@ public class Strokes {
     /**
      * Constructor
      */
-
+//Creates each stroke to be stored in chunks
     public Strokes(double lastX, double lastY, double x, double y, double linewidth, Color Color) {
         lastx = lastX;
         lasty = lastY;

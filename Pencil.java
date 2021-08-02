@@ -18,8 +18,12 @@ import java.util.*;
  * Pencil
  */
 public class Pencil {
+
+    //Stores actions
     Stack<Chunks> history = new Stack<Chunks>();
     Stack<Chunks> redoHistory = new Stack<Chunks>();
+
+    //Variables
     double lineWidth = 1;
     int r = 0;
     int g = 0;
@@ -28,7 +32,7 @@ public class Pencil {
     private double lastX;
     private double lastY;
 
-
+// Undoes previous stoke and redraws all chunks on screen
     public void undo() {
         if (!history.empty()) {
             UI.clearGraphics();
@@ -47,7 +51,7 @@ public class Pencil {
 
         UI.setLineWidth(lineWidth);
     }
-
+// Redoes previous undo and redraws all chunks on screen
     public void redo() {
         if (!redoHistory.empty()) {
             UI.clearGraphics();
@@ -89,22 +93,25 @@ public class Pencil {
         UI.setDivider(0.0);
         new JColorChooser(Color.black);
     }
-
+    //Creates new Color and sets blue value to slider value
     private void blueVal(double v) {
         b = (int) v;
         lineColor = new Color(r,g,b);
     }
+    //Creates new Color and sets green value to slider value
+
     private void greenVal(double v) {
         g = (int) v;
         lineColor = new Color(r,g,b);
     }
+    //Creates new Color and sets red value to slider value
 
     private void redVal(double v) {
         r = (int) v;
         lineColor = new Color(r,g,b);
     }
 
-
+    //Sets linewidth to slider value
     public void lineWidth(double v) {
         UI.setLineWidth(v);
         lineWidth = v;
